@@ -3,20 +3,20 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Member,Transaction
-from .serializers import MemberSerializer,TransactionSerializer
+from .models import Transaction, Camera
+from .serializers import TransactionSerializer, CameraSerializer
 from django.http import StreamingHttpResponse
 import os
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
 from rest_framework.pagination import PageNumberPagination
+from django.db.models import Q
 # Create your views here.
 
-
 @api_view(['GET'])
-def getMembers(request):
-    Blog = Member.objects.all()
-    serializer = MemberSerializer(Blog, many=True)
+def get_camera_list(request):
+    cameras = Camera.objects.all()
+    serializer = CameraSerializer(cameras, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -26,15 +26,12 @@ def getTransaction(request):
     page_number = request.query_params.get('page')
     # Filter transactions based on query parameters
     transactions = Transaction.objects.all()
-    if search_value != "" and search_value and search_value.isdigit():
+    if search_value != "" and search_value:
         search_tokens = search_value.split()
+        query = Q()
         for token in search_tokens:
-            transactions = transactions.filter(EmployeeID__icontains=token)
-
-    if search_value != ""  and search_value is not None and not search_value.isdigit():
-        search_tokens = search_value.split()
-        for token in search_tokens:
-            transactions = transactions.filter(Name__icontains=token)
+            query |= Q(Name__icontains=token) | Q(EmpID__icontains=token)
+        transactions = transactions.filter(query)
             
     if camera_number != "" and camera_number:
         transactions = transactions.filter(CameraNo=camera_number)

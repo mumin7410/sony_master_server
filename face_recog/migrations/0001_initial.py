@@ -11,14 +11,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Member',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('Name', models.CharField(max_length=255)),
-                ('Active', models.BooleanField(default=False)),
-                ('Location', models.CharField(max_length=255)),
-                ('date_time', models.DateTimeField(auto_now=True)),
-            ],
-        ),
+
     ]
