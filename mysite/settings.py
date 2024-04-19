@@ -103,7 +103,8 @@ DATABASES = {
         'HOST': os.getenv("DB_HOST"),
         'PORT': os.getenv("DB_PORT"),
         'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
+            'driver': 'ODBC Driver 18 for SQL Server',
+            'extra_params': "Encrypt=no"
         },
     },
 }
